@@ -1,0 +1,152 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include <string.h>
+
+// Structure to represent a room
+
+typedef struct Room {
+
+    char name[50];
+
+    char description[200];
+
+    struct Room* north;
+
+    struct Room* south;
+
+    struct Room* east;
+
+    struct Room* west;
+
+} Room;
+
+// Function to create a new room
+
+Room* createRoom(const char* name, const char* description) {
+
+    Room* newRoom = (Room*)malloc(sizeof(Room));
+
+    strcpy(newRoom->name, name);
+
+    strcpy(newRoom->description, description);
+
+    newRoom->north = NULL;
+
+    newRoom->south = NULL;
+
+    newRoom->east = NULL;
+
+    newRoom->west = NULL;
+
+    return newRoom;
+
+}
+
+// Function to set the neighboring rooms of a given room
+
+void setNeighbors(Room* room, Room* north, Room* south, Room* east, Room* west) {
+
+    room->north = north;
+
+    room->south = south;
+
+    room->east = east;
+
+    room->west = west;
+
+}
+
+int main() {
+
+    // Create rooms
+
+    Room* livingRoom = createRoom("Living Room", "A cozy living room with a fireplace.");
+
+    Room* kitchen = createRoom("Kitchen", "A bright and well-equipped kitchen.");
+
+    Room* bedroom = createRoom("Bedroom", "A comfortable bedroom with a king-sized bed.");
+
+    Room* bathroom = createRoom("Bathroom", "A clean and modern bathroom.");
+
+    
+
+    // Set the neighboring rooms
+
+    setNeighbors(livingRoom, kitchen, NULL, bedroom, NULL);
+
+    setNeighbors(kitchen, NULL, livingRoom, NULL, NULL);
+
+    setNeighbors(bedroom, NULL, bathroom, NULL, livingRoom);
+
+    setNeighbors(bathroom, bedroom, NULL, NULL, NULL);
+
+    
+
+    // Game loop
+
+    Room* currentRoom = livingRoom;  // Start the player in the living room
+
+    
+
+    while (1) {
+
+        // Display room information
+
+        printf("You are in the %s.\n", currentRoom->name);
+
+        printf("%s\n", currentRoom->description);
+
+        
+
+        // Prompt for user input
+
+        char userInput[10];
+
+        printf("Where would you like to go? (N/S/E/W) ");
+
+        scanf("%s", userInput);
+
+        
+
+        // Change the current room based on user input
+
+        if (strcmp(userInput, "N") == 0 && currentRoom->north != NULL) {
+
+            currentRoom = currentRoom->north;
+
+        } else if (strcmp(userInput, "S") == 0 && currentRoom->south != NULL) {
+
+            currentRoom = currentRoom->south;
+
+        } else if (strcmp(userInput, "E") == 0 && currentRoom->east != NULL) {
+
+            currentRoom = currentRoom->east;
+
+        } else if (strcmp(userInput, "W") == 0 && currentRoom->west != NULL) {
+
+            currentRoom = currentRoom->west;
+
+        } else {
+
+            printf("Invalid direction. Please try again.\n");
+
+        }
+
+        
+
+        printf("\n");
+
+    }
+
+    
+
+    // Cleanup: Free memory allocated for rooms
+
+    
+
+    return 0;
+
+}
+
